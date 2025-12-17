@@ -1,83 +1,82 @@
 AI_Resume_Analyzer
 
 AI-powered PDF resume/CV summarizer built with Python, PyPDF2, and the OpenAI API.
-Point it at a PDF and it will extract the text, split long documents into chunks, summarize each chunk, and produce a final concise summary.
 
-Features
+Extracts text from a PDF, chunks long documents, summarizes each chunk, then produces a clean final summary you can print or save.
 
-Extracts text from PDF files using PyPDF2
+✨ What it does
 
-Handles long resumes/CVs by chunking text (default: 4000 chars-ish by word sizing)
+✅ Extracts text from PDFs using PyPDF2
 
-Summarizes with OpenAI Chat Completions
+✅ Handles long PDFs with chunking
 
-CLI options for:
+✅ Summarizes using OpenAI Chat Completions
 
-max summary length (words)
+✅ Simple CLI with flags for output + length + chunk size
 
-chunk size
+🧰 Tech Stack
 
-output to a file
-
-API key via flag or environment variable
-
-Tech Stack
-
-Python 3
+Python
 
 PyPDF2
 
 OpenAI Python SDK
 
-python-dotenv for .env support
+python-dotenv
 
-Project Structure (typical)
+📁 Project Structure
 AI_Resume_Analyzer/
-  main.py
-  .env (not committed)
+  main.py            # (or your script file)
   requirements.txt
+  .env               # not committed
 
 
-If your file isn’t named main.py, replace it in the commands below.
+If your script file isn’t named main.py, replace it in the commands below.
 
-Setup
-1) Clone the repo
+⚡ Quickstart
+1) Clone
 git clone https://github.com/<your-username>/AI_Resume_Analyzer.git
 cd AI_Resume_Analyzer
 
-2) Create and activate a virtual environment (recommended)
+2) Create a virtual environment (recommended)
 python -m venv .venv
 
-# macOS/Linux
+
+Activate it:
+
+macOS/Linux
+
 source .venv/bin/activate
 
-# Windows
-# .venv\Scripts\activate
+
+Windows
+
+.venv\Scripts\activate
 
 3) Install dependencies
 pip install -r requirements.txt
 
 
-If you don’t have a requirements.txt yet, here’s a solid starter:
+If you don’t have a requirements.txt yet, use this:
 
 openai
 PyPDF2
 python-dotenv
 
-Environment Variables
+🔐 Setup your OpenAI API key
 
 Create a .env file in the project root:
 
 OPENAI_API_KEY=your_api_key_here
 
 
-The script loads env vars using:
+This project loads it with:
 
 load_dotenv(override=True)
 
-looks for OPENAI_API_KEY
+reads OPENAI_API_KEY
 
-Usage
+▶️ Usage
 Basic (prints summary to terminal)
 python main.py /path/to/resume.pdf
 
@@ -87,60 +86,67 @@ python main.py /path/to/resume.pdf --max-length 150
 Change chunk size
 python main.py /path/to/resume.pdf --chunk-size 3500
 
-Save output to a file
+Save summary to a file
 python main.py /path/to/resume.pdf --output summary.txt
 
 Provide API key via CLI (optional)
 python main.py /path/to/resume.pdf --api-key YOUR_KEY_HERE
 
-Example Output
+🧾 CLI Options
 
-The tool prints progress logs and then a final section like:
+pdf_path (required): Path to the PDF file
 
-SUMMARY
+-l, --max-length (default: 200): Max summary length in words
 
-summary text
+-c, --chunk-size (default: 4000): Chunk size used for large PDFs
 
-an optional “saved to” line if --output is provided
+-o, --output (optional): Write summary to a file
 
-Notes / Limitations
+--api-key (optional): OpenAI API key (otherwise uses OPENAI_API_KEY)
 
-Scanned PDFs (image-only resumes) may extract little or no text using PyPDF2. If you need scanned support, add OCR (e.g., Tesseract) before summarization.
+🧠 How it works (high-level)
 
-Quality depends on the extracted text and the model.
+Extracts all text from the PDF
 
-Large PDFs may take longer and use more tokens due to chunking + multiple calls.
+If text is short: summarize directly
 
-Configuration
+If text is long: split into chunks → summarize each chunk
 
-Default CLI values:
+Combine chunk summaries → optionally summarize again for a final result
 
---max-length: 200 (words)
+⚠️ Notes / Limitations
 
---chunk-size: 4000
+Scanned/image-only PDFs may return no text with PyPDF2. For those, you’ll need OCR (e.g., Tesseract) before summarizing.
 
-You can tweak these depending on how detailed you want the summary.
+Summary quality depends on the extracted text (formatting-heavy PDFs can extract messy text).
 
-Security
+The model is currently set in code to:
 
-Do not commit your .env file.
+model="gpt-3.5-turbo"
 
-Add this to .gitignore:
+You can swap the model name in summarize_chunk().
+
+🔒 Security
+
+Add this to .gitignore to avoid leaking secrets:
 
 .env
 .venv/
 __pycache__/
 
-Roadmap Ideas (optional)
 
-Resume-specific structured output (skills, experience, education, projects)
+Never commit your API key.
 
-Scoring against a job description (match %, missing keywords)
+🗺️ Roadmap (optional ideas)
 
-PDF upload + web UI (Streamlit/Flask)
+Structured resume output (Skills / Experience / Education / Projects)
+
+Score resume vs job description (match %, missing keywords)
 
 OCR support for scanned PDFs
 
-License
+Simple UI (Streamlit/Flask)
+
+📄 License
 
 MIT (or your preferred license)
