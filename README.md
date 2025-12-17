@@ -1,152 +1,148 @@
-AI_Resume_Analyzer
+📄 AI-Powered CV Reader with Python, PyPDF2, and OpenAI
 
-AI-powered PDF resume/CV summarizer built with Python, PyPDF2, and the OpenAI API.
+An intelligent PDF summarization tool built with Python that extracts and summarizes content from CVs or resumes using OpenAI's GPT models. Designed to process large PDF documents, intelligently chunk text, and generate concise summaries — ideal for HR tech, recruiting platforms, or research tools.
 
-Extracts text from a PDF, chunks long documents, summarizes each chunk, then produces a clean final summary you can print or save.
+📚 Table of Contents
 
-✨ What it does
+Introduction
 
-✅ Extracts text from PDFs using PyPDF2
+Features
 
-✅ Handles long PDFs with chunking
+Installation
 
-✅ Summarizes using OpenAI Chat Completions
+Usage
 
-✅ Simple CLI with flags for output + length + chunk size
+Configuration
 
-🧰 Tech Stack
+Examples
 
-Python
+Dependencies
 
-PyPDF2
+Troubleshooting
 
-OpenAI Python SDK
+Contributors
 
-python-dotenv
+License
 
-📁 Project Structure
-AI_Resume_Analyzer/
-  main.py            # (or your script file)
-  requirements.txt
-  .env               # not committed
+🧠 Introduction
+
+This project provides a command-line tool that:
+
+Extracts text from a PDF file (e.g., resumes or CVs),
+
+Splits the text into manageable chunks if necessary,
+
+Uses OpenAI's GPT models (via API) to summarize each chunk,
+
+Optionally combines and further condenses the summary for large documents.
+
+It is ideal for use cases where you need a quick, readable summary of a candidate’s resume or any other PDF-based content.
+
+🚀 Features
+
+✅ Text extraction from PDF using PyPDF2
+
+✅ Intelligent chunking for long documents
+
+✅ Uses OpenAI GPT (gpt-3.5-turbo) to generate summaries
+
+✅ Configurable summary length and chunk size
+
+✅ Supports output to file
+
+✅ .env support for secure API key management
+
+💾 Installation
+
+Clone the repository:
+
+git clone https://github.com/yourusername/ai-cv-reader.git
+cd ai-cv-reader
 
 
-If your script file isn’t named main.py, replace it in the commands below.
+Create and activate a virtual environment (optional but recommended):
 
-⚡ Quickstart
-1) Clone
-git clone https://github.com/<your-username>/AI_Resume_Analyzer.git
-cd AI_Resume_Analyzer
-
-2) Create a virtual environment (recommended)
-python -m venv .venv
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 
-Activate it:
+Install dependencies:
 
-macOS/Linux
-
-source .venv/bin/activate
-
-
-Windows
-
-.venv\Scripts\activate
-
-3) Install dependencies
 pip install -r requirements.txt
 
 
-If you don’t have a requirements.txt yet, use this:
+Set up your .env file:
+Create a .env file in the root directory:
+
+OPENAI_API_KEY=your_openai_api_key_here
+
+⚙️ Usage
+python main.py path/to/your_cv.pdf
+
+Optional Arguments:
+Flag	Description
+-l, --max-length	Max summary length in words (default: 200)
+-c, --chunk-size	Text chunk size for processing (default: 4000)
+-o, --output	Output file path (e.g., summary.txt)
+--api-key	Pass API key directly (overrides .env)
+Example:
+python main.py resume.pdf -l 300 -o resume_summary.txt
+
+🛠 Configuration
+
+API Key: Stored securely using python-dotenv
+. You can either:
+
+Set it in a .env file as OPENAI_API_KEY=your_key
+
+Or pass it via --api-key on the command line.
+
+Chunking: Automatically splits long text (over chunk_size characters) to prevent model token limits.
+
+🧪 Examples
+
+Example Command:
+
+python main.py sample_cv.pdf -l 250
+
+
+Output:
+
+============================================================
+SUMMARY
+============================================================
+Experienced software engineer with a strong background in AI, cloud...
+============================================================
+
+📦 Dependencies
+
+PyPDF2
 
 openai
-PyPDF2
+
 python-dotenv
 
-🔐 Setup your OpenAI API key
+Python 3.7+
 
-Create a .env file in the project root:
+To install them manually:
 
-OPENAI_API_KEY=your_api_key_here
+pip install PyPDF2 openai python-dotenv
 
+🐞 Troubleshooting
 
-This project loads it with:
+No text found in PDF: Some PDFs use image-based text. Use OCR tools like Tesseract for preprocessing.
 
-load_dotenv(override=True)
+API key errors: Ensure .env is correctly configured, or pass the --api-key flag.
 
-reads OPENAI_API_KEY
+Rate limits: If summarizing many large files, you may hit OpenAI's rate or usage limits.
 
-▶️ Usage
-Basic (prints summary to terminal)
-python main.py /path/to/resume.pdf
+👥 Contributors
 
-Set max summary length (words)
-python main.py /path/to/resume.pdf --max-length 150
+Your Name – @yourgithub
 
-Change chunk size
-python main.py /path/to/resume.pdf --chunk-size 3500
-
-Save summary to a file
-python main.py /path/to/resume.pdf --output summary.txt
-
-Provide API key via CLI (optional)
-python main.py /path/to/resume.pdf --api-key YOUR_KEY_HERE
-
-🧾 CLI Options
-
-pdf_path (required): Path to the PDF file
-
--l, --max-length (default: 200): Max summary length in words
-
--c, --chunk-size (default: 4000): Chunk size used for large PDFs
-
--o, --output (optional): Write summary to a file
-
---api-key (optional): OpenAI API key (otherwise uses OPENAI_API_KEY)
-
-🧠 How it works (high-level)
-
-Extracts all text from the PDF
-
-If text is short: summarize directly
-
-If text is long: split into chunks → summarize each chunk
-
-Combine chunk summaries → optionally summarize again for a final result
-
-⚠️ Notes / Limitations
-
-Scanned/image-only PDFs may return no text with PyPDF2. For those, you’ll need OCR (e.g., Tesseract) before summarizing.
-
-Summary quality depends on the extracted text (formatting-heavy PDFs can extract messy text).
-
-The model is currently set in code to:
-
-model="gpt-3.5-turbo"
-
-You can swap the model name in summarize_chunk().
-
-🔒 Security
-
-Add this to .gitignore to avoid leaking secrets:
-
-.env
-.venv/
-__pycache__/
-
-
-Never commit your API key.
-
-🗺️ Roadmap (optional ideas)
-
-Structured resume output (Skills / Experience / Education / Projects)
-
-Score resume vs job description (match %, missing keywords)
-
-OCR support for scanned PDFs
-
-Simple UI (Streamlit/Flask)
+Want to contribute? Feel free to open issues or submit pull requests.
 
 📄 License
 
-MIT (or your preferred license)
+This project is licensed under the MIT License
+.
